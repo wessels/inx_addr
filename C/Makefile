@@ -1,4 +1,4 @@
-NAME=inX_addr
+NAME=inx_addr
 LIB=lib${NAME}.a
 CFLAGS=-Wall -pg
 

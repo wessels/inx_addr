@@ -6,10 +6,10 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-#include "inX_addr.h"
+#include "inx_addr.h"
 
 static unsigned char v4_in_v6_prefix[12] = {0,0,0,0,0,0,0,0,0,0,0xFF,0xFF};
-int _inXaddr_hash_bits = 16;
+int _inx_addr_hash_bits = 16;
 
 static int
 is_v4_in_v6(const struct in6_addr *addr)
@@ -19,7 +19,7 @@ is_v4_in_v6(const struct in6_addr *addr)
 
 
 const char *
-inXaddr_ntop(const inX_addr *a, char *buf, socklen_t len)
+inx_addr_ntop(const inx_addr *a, char *buf, socklen_t len)
 {
 	const char *p;
 	if (!is_v4_in_v6(&a->in6))
@@ -32,7 +32,7 @@ inXaddr_ntop(const inX_addr *a, char *buf, socklen_t len)
 }
 
 int
-inXaddr_pton(const char *buf, inX_addr *a)
+inx_addr_pton(const char *buf, inx_addr *a)
 {
 	if (strchr(buf, ':'))
 		return inet_pton(AF_INET6, buf, a);
@@ -41,7 +41,7 @@ inXaddr_pton(const char *buf, inX_addr *a)
 }
 
 unsigned int
-inXaddr_hash_bits(const inX_addr *a, unsigned int bits)
+inx_addr_hash_bits(const inx_addr *a, unsigned int bits)
 {
         static const uint32_t A = 2654435769U;  // closest prime to 2^32 * $goldenratio
 	const uint32_t *x = (void*) a;
@@ -54,13 +54,13 @@ inXaddr_hash_bits(const inX_addr *a, unsigned int bits)
 }
 
 unsigned int
-inXaddr_hash(const inX_addr *a)
+inx_addr_hash(const inx_addr *a)
 {
-	return inXaddr_hash_bits(a, _inXaddr_hash_bits);
+	return inx_addr_hash_bits(a, _inx_addr_hash_bits);
 }
 
 int
-inXaddr_cmp(const inX_addr *a, const inX_addr *b)
+inx_addr_cmp(const inx_addr *a, const inx_addr *b)
 {
         if (ntohl(a->_.in4.s_addr) < ntohl(b->_.in4.s_addr))
                 return -1;
@@ -83,10 +83,10 @@ inXaddr_cmp(const inX_addr *a, const inX_addr *b)
 	return 0;
 }
 
-inX_addr
-inXaddr_mask (const inX_addr *a, const inX_addr *mask)
+inx_addr
+inx_addr_mask (const inx_addr *a, const inx_addr *mask)
 {
-	inX_addr masked;
+	inx_addr masked;
 	masked._.in4.s_addr = a->_.in4.s_addr & mask->_.in4.s_addr;
 	if (is_v4_in_v6(&a->in6)) {
 		masked._.pad2.s_addr = a->_.pad2.s_addr;
@@ -101,7 +101,7 @@ inXaddr_mask (const inX_addr *a, const inX_addr *mask)
 }
 
 int
-inXaddr_version(const inX_addr *a)
+inx_addr_version(const inx_addr *a)
 {
 	if (!is_v4_in_v6(&a->in6))
 		return 6;
@@ -109,7 +109,7 @@ inXaddr_version(const inX_addr *a)
 }
 
 int
-inXaddr_assign_v4(inX_addr *dst, const struct in_addr *src)
+inx_addr_assign_v4(inx_addr *dst, const struct in_addr *src)
 {
 	memcpy(dst, v4_in_v6_prefix, 12);
 	/* memcpy() instead of struct assignment in case src is not aligned */
@@ -118,7 +118,7 @@ inXaddr_assign_v4(inX_addr *dst, const struct in_addr *src)
 }
 
 int
-inXaddr_assign_v6(inX_addr *dst, const struct in6_addr *src)
+inx_addr_assign_v6(inx_addr *dst, const struct in6_addr *src)
 {
 	/* memcpy() instead of struct assignment in case src is not aligned */
 	memcpy(&dst->in6, src, sizeof(*src));
