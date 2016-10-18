@@ -48,7 +48,6 @@ inx_addr_hash_bits(const inx_addr *a, unsigned int bits)
         /*
          * Fibonacci hashing 
          * see http://www.brpreiss.com/books/opus4/html/page214.html
-         * Note ignores upper parts of IPv6
          */
         return (A * (x[0]+x[1]+x[2]+x[3])) >> (32 - bits);
 }

@@ -53,9 +53,8 @@ INX_ADDR::hash(unsigned int bits) const
 	/*
 	 * Fibonacci hashing 
 	 * see http://www.brpreiss.com/books/opus4/html/page214.html
-	 * Note ignores upper parts of IPv6
 	 */
-	return (a * ntohl(theAddr._.in4.s_addr)) >> (32 - bits);
+	return (a * (theAddr._.pad0.s_addr + theAddr._.pad1.s_addr + theAddr._.pad2.s_addr + theAddr._.in4.s_addr)) >> (32 - bits);
 }
 
 unsigned int
